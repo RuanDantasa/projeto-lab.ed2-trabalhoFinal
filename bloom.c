@@ -15,3 +15,17 @@ int testar_bit(filtroBloom *filtro, int posicao) {
     
     return (filtro->vetor_bits[indice_byte] & (1 << deslocamento_bit)) != 0;
 }
+
+uint32_t hash_fnv1a(const char *str, int semente) {
+    uint32_t hash = 2166136261u; 
+    int c;
+
+    hash ^= semente;
+
+    while ((c = *str++)) {
+        hash ^= (uint8_t)c;
+        hash *= 16777619u; // FNV prime
+    }
+
+    return hash;
+}
