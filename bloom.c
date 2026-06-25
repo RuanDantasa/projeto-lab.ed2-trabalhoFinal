@@ -51,3 +51,22 @@ void inserir_bloom(filtroBloom *filtro, const char *usuario) {
         setar_bit(filtro, posicao_no_vetor);
     }
 }
+
+filtroBloom* criar_bloom(int tamanho_bits, int quantidade_hashes) {
+    filtroBloom *novo_filtro = (filtroBloom*) malloc(sizeof(filtroBloom));
+    if (!novo_filtro) return NULL;
+
+    novo_filtro->tam_vetor = tamanho_bits;
+    novo_filtro->qtd_hashs = quantidade_hashes;
+    
+    int tamanho_bytes = (tamanho_bits + 7) / 8; 
+    
+    novo_filtro->vetor_bits = (uint8_t*) calloc(tamanho_bytes, sizeof(uint8_t));
+    
+    if (!novo_filtro->vetor_bits) {
+        free(novo_filtro);
+        return NULL;
+    }
+    
+    return novo_filtro;
+}
