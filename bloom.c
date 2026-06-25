@@ -43,3 +43,11 @@ int consultar_bloom(filtroBloom *filtro, const char *usuario) {
 
     return 1;
 }
+
+void inserir_bloom(filtroBloom *filtro, const char *usuario) {
+    for (int i = 0; i < filtro->qtd_hashs; i++) {
+        uint32_t hash_gigante = hash_fnv1a(usuario, i);
+        int posicao_no_vetor = hash_gigante % filtro->tam_vetor;
+        setar_bit(filtro, posicao_no_vetor);
+    }
+}
