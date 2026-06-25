@@ -69,7 +69,7 @@ filtroBloom* criar_bloom(int tamanho_bits, int quantidade_hashes) {
     }
     
     return novo_filtro;
-}`
+}
 
 void liberar_bloom(filtroBloom *filtro) {
     if (filtro) {
