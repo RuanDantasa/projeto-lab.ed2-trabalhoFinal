@@ -24,8 +24,22 @@ uint32_t hash_fnv1a(const char *str, int semente) {
 
     while ((c = *str++)) {
         hash ^= (uint8_t)c;
-        hash *= 16777619u; // FNV prime
+        hash *= 16777619u; 
+    }
+    return hash;
+}
+
+int consultar_bloom(filtroBloom *filtro, const char *usuario) {
+
+    for (int i = 0; i < filtro->qtd_hashs; i++) {
+
+        uint32_t hash_gigante = hash_fnv1a(usuario, i);
+        int posicao_no_vetor = hash_gigante % filtro->tam_vetor;
+        
+        if (testar_bit(filtro, posicao_no_vetor) == 0) {
+            return 0; 
+        }
     }
 
-    return hash;
+    return 1;
 }
