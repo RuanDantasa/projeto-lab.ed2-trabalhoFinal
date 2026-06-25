@@ -67,7 +67,7 @@ int hash_inserir(TabelaHash* th, const char* id) {
     th->quantidade++;
 
     return 1;
-} // <--- AQUI ESTAVA O ERRO! ESSA CHAVE ESTAVA FALTANDO!
+} 
 
 
 int hash_buscar(TabelaHash* th, const char* id) {
