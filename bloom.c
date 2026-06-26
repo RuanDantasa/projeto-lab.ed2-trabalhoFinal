@@ -52,22 +52,31 @@ void inserir_bloom(filtroBloom *filtro, const char *usuario) {
     }
 }
 
-filtroBloom* criar_bloom(int tamanho_bits, int quantidade_hashes) {
+filtroBloom* criar_bloom(int n_esperado, double prob_falso_positivo) {
     filtroBloom *novo_filtro = (filtroBloom*) malloc(sizeof(filtroBloom));
     if (!novo_filtro) return NULL;
 
-    novo_filtro->tam_vetor = tamanho_bits;
-    novo_filtro->qtd_hashs = quantidade_hashes;
-    
-    int tamanho_bytes = (tamanho_bits + 7) / 8; 
-    
+    double numerador_m = -(n_esperado * log(prob_falso_positivo));
+    double denominador_m = pow(log(2), 2);
+    int m = (int) ceil(numerador_m / denominador_m); 
+
+    int k = (int) round(((double)m / n_esperado) * log(2));
+
+    novo_filtro->tam_vetor = m;
+    novo_filtro->qtd_hashs = k;
+
+    int tamanho_bytes = (m + 7) / 8; 
+
     novo_filtro->vetor_bits = (uint8_t*) calloc(tamanho_bytes, sizeof(uint8_t));
     
     if (!novo_filtro->vetor_bits) {
         free(novo_filtro);
         return NULL;
     }
-    
+
+    printf("[DEBUG] Bloom criado: n=%d, p=%.2f | m=%d bits (~%d bytes), k=%d hashes\n", 
+           n_esperado, prob_falso_positivo, m, tamanho_bytes, k);
+           
     return novo_filtro;
 }
 
